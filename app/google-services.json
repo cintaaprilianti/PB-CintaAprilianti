@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422684465143",
+    "project_id": "mobile-870fc",
+    "storage_bucket": "mobile-870fc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422684465143:android:a8e8097e4ec895b46300f2",
+        "android_client_info": {
+          "package_name": "com.example.pb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxBLR1ueGrGbvr9wWHdoE39QABKfQV4eM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
