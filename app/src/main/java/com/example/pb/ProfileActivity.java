@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot snapshot) {
                     if (currentUser != null) {
                         String userId = currentUser.getUid();
-                        Log.d("FirebaseDebug", "UID saat ini: " + userId);
+                        Log.d("FirebaseDebug", "UID Anda saat ini: " + userId);
                     }
 
                     if (snapshot.exists()) {
