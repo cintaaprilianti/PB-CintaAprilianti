@@ -2,10 +2,10 @@ package com.example.pb;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -13,10 +13,11 @@ import com.google.firebase.database.*;
 public class HomeActivity extends AppCompatActivity {
 
     TextView txtUsername, txtEmail;
-    Button btnProfile;
     FirebaseAuth mAuth;
     DatabaseReference databaseReference;
     FirebaseUser currentUser;
+    CardView cardProfile, cardAssignment, cardCourse, cardStudyPlan;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +26,29 @@ public class HomeActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance("https://mobile-870fc-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
-        txtUsername = findViewById(R.id.txtUsername);
-        txtEmail = findViewById(R.id.txtEmail);
-        btnProfile = findViewById(R.id.btnProfile);
-        CardView cardProfile = findViewById(R.id.cardProfile);
+        cardProfile = findViewById(R.id.cardProfile);
+        cardAssignment = findViewById(R.id.cardAssignment);
+        cardCourse = findViewById(R.id.cardCourse);
+        cardStudyPlan = findViewById(R.id.cardStudyPlan);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                startActivity(new Intent(HomeActivity.this, HomeActivity.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_settings) {
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+                return true;
+            }
+            return false;
+        });
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -51,15 +69,9 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
-        cardProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-            startActivity(intent);
-        });
-
-        btnProfile.setOnClickListener(View -> {
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        cardProfile.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, ProfileActivity.class)));
+        cardAssignment.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AssignmentActivity.class)));
+        cardCourse.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CourseActivity.class)));
+        cardStudyPlan.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, StudyPlanActivity.class)));
     }
 }

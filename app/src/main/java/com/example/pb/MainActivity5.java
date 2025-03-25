@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -47,27 +46,27 @@ public class MainActivity5 extends AppCompatActivity {
             String nim = NimPengguna.getText().toString().trim();
 
             if (TextUtils.isEmpty(nama)) {
-                NamaPengguna.setError("Masukkan Nama Pengguna");
+                NamaPengguna.setError("Enter username");
                 NamaPengguna.requestFocus();
                 return;
             }
             if (TextUtils.isEmpty(email)) {
-                EmailPengguna.setError("Masukkan Email");
+                EmailPengguna.setError("Enter email");
                 EmailPengguna.requestFocus();
                 return;
             }
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                EmailPengguna.setError("Format Email Tidak Valid");
+                EmailPengguna.setError("Invalid email format");
                 EmailPengguna.requestFocus();
                 return;
             }
             if (TextUtils.isEmpty(password) || password.length() < 6) {
-                KataSandi.setError("Password minimal 6 karakter");
+                KataSandi.setError("Password minimum 6 characters");
                 KataSandi.requestFocus();
                 return;
             }
             if (TextUtils.isEmpty(nim)) {
-                NimPengguna.setError("Masukkan NIM");
+                NimPengguna.setError("Enter NIM");
                 NimPengguna.requestFocus();
                 return;
             }
@@ -95,9 +94,8 @@ public class MainActivity5 extends AppCompatActivity {
                     UserDetails userDetails = new UserDetails(nama, email, nim);
                     reference.child(uid).setValue(userDetails).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Log.d(TAG, "Data pengguna berhasil disimpan di Firebase.");
                             user.sendEmailVerification();
-                            Toast.makeText(MainActivity5.this, "Akun berhasil dibuat. Verifikasi email Anda.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity5.this, "Account created successfully. Verify your email.", Toast.LENGTH_LONG).show();
 
                             Intent intent = new Intent(MainActivity5.this, HomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -107,15 +105,9 @@ public class MainActivity5 extends AppCompatActivity {
                     });
                 }
             } else {
-                Log.e(TAG, "Registrasi Gagal: ", task.getException());
-                Toast.makeText(MainActivity5.this, "Registrasi gagal: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity5.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-        btSignUp.setOnClickListener(View -> {
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
-            finish();
-        });
     }
+
 }

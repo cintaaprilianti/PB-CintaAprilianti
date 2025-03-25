@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
@@ -13,10 +13,11 @@ import com.google.firebase.database.*;
 public class ProfileActivity extends AppCompatActivity {
 
     TextView txtNama, txtEmail, txtNIM;
-    Button btnLogout;
+    Button btnEditProfile;
     FirebaseAuth mAuth;
     DatabaseReference databaseReference;
     FirebaseUser currentUser;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +31,28 @@ public class ProfileActivity extends AppCompatActivity {
         txtNama = findViewById(R.id.txtNama);
         txtEmail = findViewById(R.id.txtEmail);
         txtNIM = findViewById(R.id.txtNIM);
-        btnLogout = findViewById(R.id.btnLogout);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                startActivity(new Intent(ProfileActivity.this, HomeActivity.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_settings) {
+                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                return true;
+            }
+            return false;
+        });
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
             databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    if (currentUser != null) {
-                        String userId = currentUser.getUid();
-                        Log.d("FirebaseDebug", "UID Anda saat ini: " + userId);
-                    }
-
                     if (snapshot.exists()) {
                         UserDetails user = snapshot.getValue(UserDetails.class);
                         txtNama.setText(user.getNama());
@@ -57,13 +68,9 @@ public class ProfileActivity extends AppCompatActivity {
             });
         }
 
-        btnLogout.setOnClickListener(v -> {
-            mAuth.signOut();
-            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
             startActivity(intent);
-            finish();
         });
-
     }
 }

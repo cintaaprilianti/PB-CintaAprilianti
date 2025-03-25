@@ -48,4 +48,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation ("com.google.firebase:firebase-auth:22.2.0")
     implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation ("com.google.android.material:material:1.9.0")
 }
